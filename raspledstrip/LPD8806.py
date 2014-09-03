@@ -24,16 +24,13 @@ class LPD8806(object):
             self.spi.xfer2([0x00,0x00,0x00]) #zero fill the last to prevent stray colors at the end
             self.spi.xfer2([0x00]) #once more with feeling - this helps :)
         else:
+            spibuffer=str()
             for x in range(self.leds):
-                self.spi.write(buffer[x])
-                self.spi.flush()
+                spibuffer+=buffer[x]
+
+            self.spi.write(buffer[x])
+            self.spi.flush()
             #seems that the more lights we have the more you have to push zeros
             #not 100% sure why this is yet, but it seems to work
-            self.spi.write(bytearray(b'\x00\x00\x00')) #zero fill the last to prevent stray colors at the end
-            self.spi.flush()
-            self.spi.write(bytearray(b'\x00\x00\x00'))
-            self.spi.flush()
-            self.spi.write(bytearray(b'\x00\x00\x00'))
-            self.spi.flush()
-            self.spi.write(bytearray(b'\x00\x00\x00'))
+            self.spi.write(bytearray(b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')) #zero fill the last to prevent stray colors at the end
             self.spi.flush()
